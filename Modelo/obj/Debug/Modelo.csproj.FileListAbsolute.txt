@@ -1,0 +1,10 @@
+C:\Users\EmyBreak\Documents\Visual Studio 2015\Projects\CRUDordenesServicios\Modelo\bin\Debug\Modelo.dll
+C:\Users\EmyBreak\Documents\Visual Studio 2015\Projects\CRUDordenesServicios\Modelo\bin\Debug\Modelo.pdb
+C:\Users\EmyBreak\Documents\Visual Studio 2015\Projects\CRUDordenesServicios\Modelo\obj\Debug\Modelo.csprojResolveAssemblyReference.cache
+C:\Users\EmyBreak\Documents\Visual Studio 2015\Projects\CRUDordenesServicios\Modelo\obj\Debug\Modelo.dll
+C:\Users\EmyBreak\Documents\Visual Studio 2015\Projects\CRUDordenesServicios\Modelo\obj\Debug\Modelo.pdb
+C:\Users\EmyBreak\Documents\Visual Studio 2015\Projects\CRUDordenesServicios\Modelo\bin\Debug\Newtonsoft.Json.dll
+C:\Users\EmyBreak\Documents\Visual Studio 2015\Projects\CRUDordenesServicios\Modelo\bin\Debug\Newtonsoft.Json.xml
+C:\Users\EmyBreak\Documents\Visual Studio 2015\Projects\CRUDordenesServicios\Modelo\bin\Debug\BouncyCastle.Crypto.dll
+C:\Users\EmyBreak\Documents\Visual Studio 2015\Projects\CRUDordenesServicios\Modelo\bin\Debug\itextsharp.dll
+C:\Users\EmyBreak\Documents\Visual Studio 2015\Projects\CRUDordenesServicios\Modelo\bin\Debug\itextsharp.xml
