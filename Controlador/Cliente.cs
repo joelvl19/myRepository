@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -99,7 +99,7 @@ namespace Controlador
 
         public bool Modificar()
         {
-            return con.Modificar("cliente", "nombre " + NomCliente + "fecha " + Fecha + ",descripcion " + DescServicio + ",estado " + Estado + "'", "id= " + idCliente + "'");
+            return con.Modificar("cliente", "nombre = '" + NomCliente + "', fecha = '" + Fecha + "', descripcion = '" + DescServicio + "', estado = '" + Estado + "'", "id = " + idCliente);
         }
 
         public bool Eliminar()
