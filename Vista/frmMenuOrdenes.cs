@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -23,12 +23,21 @@ namespace Vista
     {
         Cliente cli = new Cliente();
         List<Cliente> lisCliente = new List<Cliente>();
+
         public frmMenuOrdenes()
         {
             cli.Abrir();
             InitializeComponent();
             cargarDatosGrid();
+            desabilitarCampos();
 
+        }
+        public void desabilitarCampos()
+        {
+            txtClient.Enabled = false;
+            txtDescri.Enabled = false;
+            cmbEstado.Enabled = false;
+            dtpFecha.Enabled = false;
         }
 
         public void igualarCampos()
@@ -51,15 +60,49 @@ namespace Vista
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
-            cli.Abrir();
-            igualarCampos();
-            if (cli.Modificar())
+          
+            this.Hide();
+
+            // Obtiene la fila seleccionada
+            DataGridViewRow filaSeleccionada = dgvClien.CurrentRow;
+            if (filaSeleccionada != null)
             {
-                MessageBox.Show("La modificacion ah sido exitosa");
+                // Crea un objeto de la clase que representa los datos
+                Cliente clienteSeleccionado = new Cliente();
+
+                // Rellena el objeto con los datos de la fila seleccionada
+                clienteSeleccionado.IdCliente = Convert.ToInt32(filaSeleccionada.Cells["ColID"].Value);
+                clienteSeleccionado.NomCliente = Convert.ToString(filaSeleccionada.Cells["ColNombre"].Value);
+                clienteSeleccionado.Fecha = Convert.ToDateTime(filaSeleccionada.Cells["ColFecha"].Value);
+                clienteSeleccionado.DescServicio = Convert.ToString(filaSeleccionada.Cells["ColDescripcion"].Value);
+                clienteSeleccionado.Estado = Convert.ToString(filaSeleccionada.Cells["ColEstado"].Value);
+
+                // Crea una instancia del formulario donde deseas mostrar los datos y pásale el objeto como parámetro
+                frmModificarOrdenes VentanaModificar = new frmModificarOrdenes(clienteSeleccionado);
+                VentanaModificar.ShowDialog();
+
             }
-            else
+        }
+
+        public void cargarDatosEnTexbox(object sender, DataGridViewCellEventArgs e)
+        {
+            try
             {
-                MessageBox.Show("Ah fallado la modificacion");
+                for (int i = 0; i < lisCliente.Count; i++)
+                {
+                    if (Convert.ToInt64(dgvClien.CurrentRow.Cells["ColID"].Value) == lisCliente[i].IdCliente)
+                    {
+                        txtidclient.Text = dgvClien[0, e.RowIndex].Value.ToString();
+                        txtClient.Text = dgvClien[1, e.RowIndex].Value.ToString();
+                        dtpFecha.Text = dgvClien[2, e.RowIndex].Value.ToString();
+                        cmbEstado.Text = dgvClien[3, e.RowIndex].Value.ToString();
+                        txtDescri.Text = dgvClien[4, e.RowIndex].Value.ToString();
+                    }
+                }
+            }
+            catch (NullReferenceException nrex)
+            {
+                MessageBox.Show("Dale Click En Aceptar" + nrex);
             }
         }
         public void cargarDatosGrid()
@@ -112,7 +155,7 @@ namespace Vista
                 {
                     if (int.Parse(txtidclient.Text) == int.Parse(dgvClien[0, i].Value.ToString()))
                     {
-                        if (MessageBox.Show("Se dispone a eliminar a " + lisCliente[i].NomCliente + " " + lisCliente[i].Fecha + " ", "Eliminar Usuario", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        if (MessageBox.Show("Esta seguro que quiere eliminar a " + lisCliente[i].NomCliente + " " + lisCliente[i].Fecha + " ", "Eliminar Usuario", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
 
                             igualarCampos();
@@ -195,33 +238,44 @@ namespace Vista
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";
             request.ContentType = "application/json";
-            
-            // Convertir el objeto JSON a una cadena
-            string json = JsonConvert.SerializeObject(cli.listaCliente());
 
-
-            // Escribir la cadena JSON en la solicitud HTTP POST
-            using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+            try
             {
-                streamWriter.Write(json);
-            }
+                // Convertir el objeto JSON a una cadena
+                string json = JsonConvert.SerializeObject(cli.listaCliente());
 
-            // Obtener la respuesta de la solicitud HTTP POST
-            string responseString;
-            using (var response = (HttpWebResponse)request.GetResponse())
-            {
-                using (var streamReader = new StreamReader(response.GetResponseStream()))
+                // Escribir la cadena JSON en la solicitud HTTP POST
+                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
                 {
-                    responseString = streamReader.ReadToEnd();
+                    streamWriter.Write(json);
                 }
-            }
 
-            MessageBox.Show("Los datos se han enviado correctamente al servidor.");
+                // Obtener la respuesta de la solicitud HTTP POST
+                string responseString;
+                using (var response = (HttpWebResponse)request.GetResponse())
+                {
+                    using (var streamReader = new StreamReader(response.GetResponseStream()))
+                    {
+                        responseString = streamReader.ReadToEnd();
+                    }
+                }
+
+                MessageBox.Show("Los datos se han enviado correctamente al servidor.");
+            }
+            catch (WebException ex)
+            {
+                MessageBox.Show("Ha ocurrido un error al enviar los datos: " + ex.Message);
+            }
         }
 
         private void btnInform_Click(object sender, EventArgs e)
         {
             MessageBox.Show("PARA QUE LOS BOTONES DE ELIMINAR Y MODIFICAR SE ACTIVEN ES NECESARIO DAR DOBLE CLIC EN EL DATAGRIDVIEW Y TAMBIEN CON DOBLE CLIC SELECCIONAS EL REGISTRO A ELIMINAR O MODIFICAR ");
+        }
+
+        private void dgvClien_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+           
         }
     }   
 }
